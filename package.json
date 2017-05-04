@@ -8,7 +8,10 @@
     "start": "webpack-dev-server --open"
   },
   "babel": {
-    "presets": ["env", "react"]
+    "presets": [
+      "env",
+      "react"
+    ]
   },
   "repository": {
     "type": "git",
@@ -22,6 +25,7 @@
   },
   "homepage": "https://github.com/arafeenbd/github-battle#readme",
   "dependencies": {
+    "axios": "^0.16.1",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
   },
