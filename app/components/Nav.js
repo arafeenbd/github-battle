@@ -10,7 +10,7 @@ function Nav() {
         </NavLink>
       </li>
       <li>
-        <NavLink activeClassName='active' to='/batlle'>
+        <NavLink activeClassName='active' to='/battle'>
           Battle
         </NavLink>
       </li>
