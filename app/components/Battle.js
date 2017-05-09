@@ -1,5 +1,6 @@
 var React = require('react')
 var PropTypes = require('prop-types')
+var Link = require('react-router-dom').Link
 
 class PlayerInput extends React.Component {
   constructor(props) {
@@ -98,35 +99,49 @@ class Battle extends React.Component {
     var playerTwo = this.state.playerTwo
     var playerOneImage = this.state.playerOneImage
     var playerTwoImage = this.state.playerTwoImage
+    var match = this.props.match
 
     return (
       <div>
-        {!playerOne &&
-          <PlayerInput
-            id='playerOne'
-            label='Player One'
-            onSubmit={this.handleSubmit}/>}
+        <div className='row'>
+          {!playerOne &&
+            <PlayerInput
+              id='playerOne'
+              label='Player One'
+              onSubmit={this.handleSubmit}/>}
 
-        {
-          playerOneImage !== null &&
-          <PlayerPreview
-            username={playerOne}
-            image={playerOneImage}
-            onReset={this.handleReset}/>
-        }
+          {
+            playerOneImage !== null &&
+            <PlayerPreview
+              id='playerOne'
+              username={playerOne}
+              image={playerOneImage}
+              onReset={this.handleReset}/>
+          }
 
-        {!playerTwoImage &&
-          <PlayerInput
-            id='playerTwo'
-            label='Player Two'
-            onSubmit={this.handleSubmit} />}
+          {!playerTwoImage &&
+            <PlayerInput
+              id='playerTwo'
+              label='Player Two'
+              onSubmit={this.handleSubmit} />}
 
-        {
-          playerTwoImage !== null &&
-          <PlayerPreview
-            username={playerTwo}
-            image={playerTwoImage}
-            onReset={this.handleReset}/>
+          {
+            playerTwoImage !== null &&
+            <PlayerPreview
+              id='playerTwo'
+              username={playerTwo}
+              image={playerTwoImage}
+              onReset={this.handleReset}/>
+          }
+        </div>
+        { playerOneImage && playerTwoImage &&
+          <Link className='button'
+            to={{
+                  pathname: match.url + '/results',
+                  search: '?playerOne=' + playerOne + '&playerTwo=' + playerTwo
+                }}>
+            Battle
+          </Link>
         }
       </div>
     )
@@ -145,7 +160,8 @@ function PlayerPreview(props) {
         <h2 className='username'>@{props.username}</h2>
       </div>
       <button
-        className='reset'>
+        className='reset'
+        onClick={props.onReset.bind(null, props.id)}>
           Reset
       </button>
     </div>
@@ -154,7 +170,9 @@ function PlayerPreview(props) {
 
 PlayerPreview.propTypes = {
   username : PropTypes.string.isRequired,
-  image : PropTypes.string.isRequired
+  image : PropTypes.string.isRequired,
+  onReset: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired
 }
 
 module.exports = Battle
