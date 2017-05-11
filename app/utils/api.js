@@ -1,8 +1,9 @@
 var axios = require('axios');
 
-var id = 'your_client_id'
-var sec = 'your_secret_id'
-var params = 
+var id = 'arafeenbd'
+var sec = '15ab5096612aec9e64ec5aa0f165e2dac0067391'
+var params = "?client_id=" + id + "&client_secret=" + sec
+
 function getProfile(username) {
   return axios.get('https://api.github.com/users/' + username + params)
     .then(function(user){
@@ -15,14 +16,14 @@ function getRepos(username) {
 }
 
 function getStarCount(repos) {
-  repos.data.reduce(function(count, repo) {
+  return repos.data.reduce(function(count, repo) {
     return count + repo.stargazers_count
   }, 0)
 }
 
 function calculateScore(profile, repos){
   var followers = profile.followers
-  var totalStars = getStarCount(repos);
+  var totalStars = getStarCount(repos)
 
   return (followers * 3) + totalStars
 }
