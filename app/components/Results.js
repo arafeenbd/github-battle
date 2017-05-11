@@ -2,6 +2,21 @@ var React = require('react')
 var queryString = require('query-string')
 var api = require('../utils/api')
 var Link = require('react-router-dom').Link
+var PropTypes = require('prop-types')
+
+function Player(props) {
+  return (
+    <div>
+      <h1 className='header'>{props.label}</h1>
+      <h3 style={{textAlign: 'center'}}>Score: {props.score}</h3>
+    </div>
+  )
+}
+
+Player.propTypes = {
+  label: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired
+}
 
 class Results extends React.Component {
 
@@ -10,7 +25,9 @@ class Results extends React.Component {
 
     this.state = {
       loser: null,
-      winner: null
+      winner: null,
+      error:null,
+      loading:true
     }
   }
 
@@ -23,7 +40,9 @@ class Results extends React.Component {
         if(results === null) {
           return this.setState(function () {
               return {
-                error : 'Looks like error occured'
+                error : 'Looks like error occured',
+                loading:false
+
               }
           })
         }
@@ -31,7 +50,8 @@ class Results extends React.Component {
         this.setState(function() {
           return {
             winner: results[0],
-            loser: results[1]
+            loser: results[1],
+            loading:false
           }
         })
       }.bind(this))
@@ -40,6 +60,16 @@ class Results extends React.Component {
   render() {
     var winner = this.state.winner
     var loser = this.state.loser
+    var error = this.state.error
+    var loading = this.state.loading
+
+    if(loading) {
+      return (
+        <div>
+          Loading
+        </div>
+      )
+    }
 
     if(error) {
       return (
@@ -51,9 +81,16 @@ class Results extends React.Component {
         </div>
       )
     }
+
     return (
-      <div>
-        Loser: {JSON.stringify(winner)}
+      <div className='row'>
+        <Player
+          label="Winner"
+          score={winner.score} />
+
+        <Player
+          label="Loser"
+          score={loser.score} />
       </div>
     )
   }
