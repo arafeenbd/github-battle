@@ -3,12 +3,35 @@ var queryString = require('query-string')
 var api = require('../utils/api')
 var Link = require('react-router-dom').Link
 var PropTypes = require('prop-types')
+var PlayerPreview = require('./PlayerPreview')
+
+function Profile (props) {
+  var info = props.info
+  return (
+    <PlayerPreview username={info.login} image={info.avatar_url}>
+      <ul className='space-list-items'>
+        {info.name && <li>{info.name}</li>}
+        {info.location && <li>{info.location}</li>}
+        {info.company && <li>{info.company}</li>}
+        <li>Followers: {info.followers}</li>
+        <li>Following: {info.following}</li>
+        <li>Public Repos: {info.public_repos}</li>
+        {info.blog && <li><a href={info.blog}>{info.blog}</a></li>}
+      </ul>
+    </PlayerPreview>
+  )
+}
+
+Profile.propTypes = {
+  info: PropTypes.object.isRequired,
+}
 
 function Player(props) {
   return (
     <div>
       <h1 className='header'>{props.label}</h1>
       <h3 style={{textAlign: 'center'}}>Score: {props.score}</h3>
+      <Profile info={props.profile} />
     </div>
   )
 }
@@ -36,13 +59,11 @@ class Results extends React.Component {
 
     api.battle([players.playerOne, players.playerTwo])
       .then(function(results) {
-
         if(results === null) {
           return this.setState(function () {
               return {
                 error : 'Looks like error occured',
                 loading:false
-
               }
           })
         }
@@ -86,14 +107,22 @@ class Results extends React.Component {
       <div className='row'>
         <Player
           label="Winner"
-          score={winner.score} />
+          score={winner.score}
+          profile={winner.profile} />
 
         <Player
           label="Loser"
-          score={loser.score} />
+          score={loser.score}
+          profile={loser.profile} />
       </div>
     )
   }
+}
+
+Player.propTypes = {
+  label: PropTypes.string.isRequired,
+  score: PropTypes.number.isRequired,
+  profile: PropTypes.object.isRequired,
 }
 
 module.exports = Results

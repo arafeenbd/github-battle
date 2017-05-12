@@ -1,6 +1,7 @@
 var React = require('react')
 var PropTypes = require('prop-types')
 var Link = require('react-router-dom').Link
+var PlayerPreview = require('./PlayerPreview')
 
 class PlayerInput extends React.Component {
   constructor(props) {
@@ -113,25 +114,31 @@ class Battle extends React.Component {
           {
             playerOneImage !== null &&
             <PlayerPreview
-              id='playerOne'
               username={playerOne}
-              image={playerOneImage}
-              onReset={this.handleReset}/>
+              image={playerOneImage}>
+              <button
+                className='reset'
+                onClick={this.handleReset.bind(null, 'playerOne')}>
+                  Reset
+              </button>
+            </PlayerPreview>
           }
-
           {!playerTwoImage &&
             <PlayerInput
               id='playerTwo'
               label='Player Two'
               onSubmit={this.handleSubmit} />}
-
           {
             playerTwoImage !== null &&
             <PlayerPreview
-              id='playerTwo'
               username={playerTwo}
-              image={playerTwoImage}
-              onReset={this.handleReset}/>
+              image={playerTwoImage}>
+              <button
+                className='reset'
+                onClick={this.handleReset.bind(null, 'playerTwo')}>
+                  Reset
+              </button>
+            </PlayerPreview>
           }
         </div>
         { playerOneImage && playerTwoImage &&
@@ -146,33 +153,6 @@ class Battle extends React.Component {
       </div>
     )
   }
-}
-
-function PlayerPreview(props) {
-  return (
-    <div>
-      <div className='column'>
-        <img
-          className='avatar'
-          src={props.image}
-          alt={'Avator for' + props.username}
-        />
-        <h2 className='username'>@{props.username}</h2>
-      </div>
-      <button
-        className='reset'
-        onClick={props.onReset.bind(null, props.id)}>
-          Reset
-      </button>
-    </div>
-  )
-}
-
-PlayerPreview.propTypes = {
-  username : PropTypes.string.isRequired,
-  image : PropTypes.string.isRequired,
-  onReset: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired
 }
 
 module.exports = Battle
